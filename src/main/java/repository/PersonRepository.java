@@ -1,19 +1,16 @@
 package repository;
 
 import entity.Person;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import entity.PersonKey;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
-public class PersonRepository {
-    @PersistenceContext
-    private EntityManager entityManager;
-
-    public List<Person> getPersonsByCity(String city) {
-        String databaseQuery = "SELECT person FROM Person person WHERE person.city_of_living = :city";
-        return entityManager.createQuery(databaseQuery, Person.class)
-                .setParameter("city", city)
-                .getResultList();
-    }
+@Repository
+public interface PersonRepository extends JpaRepository<Person, PersonKey> {
+    List<Person> findPersonByCity(String city);
+    List<Person> findPersonById_AgeLessThanOrderById_AgeAsc(Integer age);
+    Optional<List<Person>> findPersonById_NameAndAndId_Surname(String name, String surname);
 }
